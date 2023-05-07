@@ -20,13 +20,14 @@ from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
 
 schema_url_patterns = [
+    path('user/', include('user.urls')),
 ]
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Green Space API",
+        title="Hey Groot API",
         default_version='v1',
-        description = "Green Space API",
+        description = "",
         terms_of_service="https://www.google.com/policies/terms/",
         contact=openapi.Contact(email="21913662@yu.ac.kr"),
         license=openapi.License(name="김지혜"),
