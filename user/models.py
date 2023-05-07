@@ -1,7 +1,6 @@
 from django.db import models
-
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.utils import timezone
 
 # 헬퍼 클래스
 class UserManager(BaseUserManager):
@@ -35,9 +34,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(default=timezone.now)
 
+    # last_visit = models.DateTimeField(auto_now=True)
+    
 	# 헬퍼 클래스 사용
     objects = UserManager()
 
