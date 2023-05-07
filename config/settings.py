@@ -123,13 +123,13 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Seoul'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -199,5 +199,8 @@ REST_AUTH = {
     'JWT_AUTH_HTTPONLY': False,
     'SESSION_LOGIN' : False,
     'TOKEN_SERIALIZER': 'dj_rest_auth.serializers.TokenSerializer',
-    'JWT_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer'
+    'JWT_SERIALIZER': 'dj_rest_auth.serializers.JWTSerializer',
+    'LOGIN_SERIALIZER': 'user.serializers.CustomLoginSerializer',
+    'USER_DETAILS_SERIALIZER': 'user.serializers.CustomUserDetailsSerializer',
+    
 }
