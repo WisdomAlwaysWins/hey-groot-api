@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     
     # 생성한 앱
     'user',
+    'plant',
 
     # 설치한 라이브러리
     'rest_framework',
@@ -55,6 +56,7 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'drf_yasg',
     'django_extensions',
+    'colorfield',
 ]
 
 MIDDLEWARE = [
@@ -125,6 +127,8 @@ LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'Asia/Seoul'
 
+DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S'
+
 USE_I18N = True
 
 USE_L10N = True
@@ -136,6 +140,15 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'assets')
+]
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -159,11 +172,12 @@ ACCOUNT_EMAIL_VERIFICATION = 'none' # 회원가입 과정에서 이메일 인증
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    'DATETIME_FORMAT' : '%Y-%m-%d %H:%M:%S'
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=30),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=300),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'ROTATE_REFRESH_TOKENS': False,
     'BLACKLIST_AFTER_ROTATION': False,

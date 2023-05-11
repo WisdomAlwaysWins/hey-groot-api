@@ -29,14 +29,13 @@ class UserManager(BaseUserManager):
 
 # AbstractBaseUser를 상속해서 유저 커스텀
 class User(AbstractBaseUser, PermissionsMixin):
-    
+    nickname = models.CharField(max_length=15, null=True)
     email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
-
-    # last_visit = models.DateTimeField(auto_now=True)
+    last_visit = models.DateTimeField(default=timezone.now, null=True)
     
 	# 헬퍼 클래스 사용
     objects = UserManager()
