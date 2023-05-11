@@ -3,8 +3,9 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.response import Response
 from .models import User
-from dj_rest_auth.views import LoginView
 from django.contrib.auth.models import update_last_login
+from .serializers import UserProfileSerializer
+import datetime
 
 class DeleteUserView(APIView):
     def delete(self, request):
@@ -12,17 +13,20 @@ class DeleteUserView(APIView):
         user.delete()
         return Response(status=status.HTTP_200_OK)
 
-# class CustomLoginView(LoginView):
-    
-#     def post(self, request, *args, **kwargs):
-#         self.request = request
-#         self.serializer = self.get_serializer(data=self.request.data)
-#         self.serializer.is_valid(raise_exception=True)
+class UpdateLastVisitView(APIView):
+    def get(self, request):
+        user = User.objects.get(id = request.user.id)
+        print("***************    ", user)
         
-#         print("****************       ", self.request.data['email'])
-#         print("****************       ", self.request.data['password'])
-#         print("****************       ", self.serializer.data['email'])
-#         self.login()
-#         update_last_login(None, self.request.data)
-#         return self.get_response()
+        now = datetime.datetime.now()
+        now_date = now.strftime('%Y-%m-%d %H:%M:%S')
+        # print("********************  ", now_date)
+        request.data['last_visit'] = now_date
+        print("***************    ", request.data['last_visit'])
 
+        serializer = UserProfileSerializer(user, data = request.data, partial = True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)

@@ -55,3 +55,10 @@ class CustomLoginSerializer(LoginSerializer):
         
         attrs['user'] = user
         return attrs
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    last_visit = serializers.DateTimeField(format= '%Y-%m-%d %H:%M:%S')
+    class Meta:
+        model = User
+        fields = ['last_visit']
+        

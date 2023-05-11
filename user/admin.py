@@ -6,10 +6,10 @@ from django.forms import Textarea
 
 class UserAdminConfig(UserAdmin):
     ordering = ('-created_at',)
-    list_display = ('id', 'email', 'last_login')
+    list_display = ('id', 'email', 'nickname' , 'last_login')
 
     fieldsets = (
-        (None, {'fields': ('email', 'password', 'created_at', 'last_login')}),
+        (None, {'fields': ('email', 'nickname' , 'password', 'created_at', 'last_login', 'last_visit')}),
         ('Permissions', {'fields': ('is_staff', 'is_active',)}),
     )
     formfield_overrides = {
