@@ -12,3 +12,7 @@ class PartnerAdmin(admin.ModelAdmin):
 @admin.register(Bookmark)
 class BookmarkAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_id', 'plant_id')
+    
+@admin.register(Request)
+class RequestAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_id', 'content', 'is_confirm')    
