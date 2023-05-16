@@ -15,10 +15,10 @@ def path(instance, filename):
 class Character(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
-    basic_emo = models.ImageField(upload_to='appname', null=True)
-    angry_emo = models.ImageField(upload_to='appname', null=True)
-    sad_emo = models.ImageField(upload_to='appname', null=True)
-    happy_emo = models.ImageField(upload_to='appname', null=True)
+    basic_emo = models.ImageField(upload_to='character/', null=True)
+    angry_emo = models.ImageField(upload_to='character/', null=True)
+    sad_emo = models.ImageField(upload_to='character/', null=True)
+    happy_emo = models.ImageField(upload_to='character/', null=True)
 
 class Partner(models.Model):
     id = models.AutoField(primary_key=True)
@@ -30,3 +30,10 @@ class Bookmark(models.Model):
     id = models.AutoField(primary_key=True)
     user_id = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE, db_column='user_id')
     plant_id = models.CharField(max_length=10, null=False, blank=False)
+    
+class Request(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User, related_name='applicant', on_delete=models.CASCADE, db_column='user_id')
+    content = models.TextField('CONTENT')
+    reference_photo = models.ImageField(upload_to='request/%Y/%m/%d/', blank=True)
+    is_confirm  = models.BooleanField(default=False)
