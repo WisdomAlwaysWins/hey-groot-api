@@ -4,13 +4,13 @@ from user.models import User
 
 # Create your models here.
 
-def path(instance, filename):
-    from random import choice
-    import string
-    arr = [choice(string.ascii_letters) for _ in range(8)]
-    pid = ''.join(arr)
-    extension = filename.split('.')[-1]
-    return '%s/%s.%s' % (instance.id, pid, extension)
+# def path(instance, filename):
+#     from random import choice
+#     import string
+#     arr = [choice(string.ascii_letters) for _ in range(8)]
+#     pid = ''.join(arr)
+#     extension = filename.split('.')[-1]
+#     return '%s/%s.%s' % (instance.id, pid, extension)
 
 class Character(models.Model):
     id = models.AutoField(primary_key=True)

@@ -18,6 +18,8 @@ from django.urls import path, include
 from rest_framework.permissions import AllowAny
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view
+from django.conf.urls.static import static
+from django.conf import settings
 
 schema_url_patterns = [
     path('user/', include('user.urls')),
@@ -46,5 +48,8 @@ urlpatterns = [
     path('docs/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
     
     path('user/', include('user.urls')),
+    path('plant/', include('plant.urls')),
     
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
