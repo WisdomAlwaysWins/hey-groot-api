@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, viewsets
 from .models import *
 from .serializer import *
+from user.models import User
 
 # Create your views here.
 
@@ -46,7 +47,55 @@ class BookmarkView(APIView):
         }, status = status.HTTP_200_OK)
 
 class BookmarkListView(APIView):
+    # 북마크 리스트
     def get(self, request):
         bookmark = Bookmark.objects.filter(user_id = request.user)
         serializer = BookmarkSerializer(bookmark, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class CharacterViewSet(viewsets.ModelViewSet):
+    # 캐릭터 CRUD
+    queryset = Character.objects.all()
+    serializer_class = CharacterSerializer
+    
+class PartnerView(APIView):
+    def get(self, request):
+        partner = Partner.objects.get(user_id = request.user)
+        serializer = PartnerDetailSerializer(partner)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request):
+        
+        partner = Partner.objects.filter(user_id = request.user)
+        
+        if partner.exists() :
+            return Response({
+                "message" : "이미 생성 완료"
+            }, status = status.HTTP_400_BAD_REQUEST)
+        else :
+            serializer = PartnerUpdateSerializer(data = request.data)
+            
+            if serializer.is_valid():
+                Partner.objects.create(
+                    user_id = request.user,
+                    character_id = request.data['character_id'],
+                    name = request.data['name'],
+                    is_alarm = request.data['is_alarm'],
+                    pot_color = request.data['pot_color']
+                )
+                return Response(serializer.data, status = status.HTTP_201_CREATED)
+            return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        
+    
+    def patch(self, request):
+        partner = Partner.objects.get(user_id = request.user)
+        serializer = PartnerUpdateSerializer(partner, request.data, partial=True)
+        serializer.is_valid()
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else :
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        
+    

@@ -1,0 +1,1 @@
+web: gunicorn hey-groot-api.wsgi --log-file -
