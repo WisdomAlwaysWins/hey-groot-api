@@ -1,4 +1,4 @@
-from django.conf import settings
+Ufrom django.conf import settings
 from .models import User
 from rest_framework import serializers
 from dj_rest_auth.serializers import UserDetailsSerializer, LoginSerializer

@@ -60,35 +60,34 @@ class CharacterViewSet(viewsets.ModelViewSet):
     
 class PartnerView(APIView):
     def get(self, request):
-        partner = Partner.objects.get(user_id = request.user)
+        partner = Partner.objects.get(user_id = request.user.id)
+        print("*************      ", partner)
         serializer = PartnerDetailSerializer(partner)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     def post(self, request):
-        
+        request.data._mutable = True
+        request.data['user_id'] = request.user.id
+        request.data._mutable = False
         partner = Partner.objects.filter(user_id = request.user)
+        print(partner)
         
         if partner.exists() :
             return Response({
                 "message" : "이미 생성 완료"
             }, status = status.HTTP_400_BAD_REQUEST)
         else :
+            character = Character.objects.get(id = request.data['character_id'])
             serializer = PartnerUpdateSerializer(data = request.data)
             
             if serializer.is_valid():
-                Partner.objects.create(
-                    user_id = request.user,
-                    character_id = request.data['character_id'],
-                    name = request.data['name'],
-                    is_alarm = request.data['is_alarm'],
-                    pot_color = request.data['pot_color']
-                )
+                serializer.save()
                 return Response(serializer.data, status = status.HTTP_201_CREATED)
             return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
         
     
     def patch(self, request):
-        partner = Partner.objects.get(user_id = request.user)
+        partner = Partner.objects.get(user_id = request.user.id)
         serializer = PartnerUpdateSerializer(partner, request.data, partial=True)
         serializer.is_valid()
         if serializer.is_valid():
