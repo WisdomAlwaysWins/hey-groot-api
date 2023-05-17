@@ -15,14 +15,19 @@ from user.models import User
 class Character(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
-    basic_emo = models.ImageField(upload_to='character/', null=True)
-    angry_emo = models.ImageField(upload_to='character/', null=True)
-    sad_emo = models.ImageField(upload_to='character/', null=True)
-    happy_emo = models.ImageField(upload_to='character/', null=True)
-
+    basic_emo = models.ImageField(upload_to='character/', null=True, blank=True)
+    angry_emo = models.ImageField(upload_to='character/', null=True, blank=True)
+    sad_emo = models.ImageField(upload_to='character/', null=True, blank=True)
+    happy_emo = models.ImageField(upload_to='character/', null=True, blank=True)
+    
+    def __str__(self) :
+        return self.name
+    
 class Partner(models.Model):
-    id = models.AutoField(primary_key=True)
+    id = models.AutoField(primary_key=True),
+    user_id = models.ForeignKey(User, related_name='master', on_delete=models.CASCADE, db_column='user_id', null=True)
     character_id = models.ForeignKey(Character, related_name='character', on_delete=models.CASCADE, db_column='character_id')
+    name = models.CharField(max_length=100, null=True)
     is_alarm = models.BooleanField(default=True)
     pot_color = ColorField(default='##f5c542')
     
