@@ -13,7 +13,7 @@ class DeleteUserView(APIView):
         user.delete()
         return Response(status=status.HTTP_200_OK)
 
-class UpdateLastVisitView(APIView):
+class UpdateUserInfoView(APIView):
     def get(self, request):
         user = User.objects.get(id = request.user.id)
         print("***************    ", user)
@@ -26,6 +26,14 @@ class UpdateLastVisitView(APIView):
 
         serializer = UserProfileSerializer(user, data = request.data, partial = True)
 
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    
+    def post(self, request):
+        user = User.objects.get(id = request.user.id)
+        serializer = UserProfileSerializer(user, data = request.data, partial = True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)

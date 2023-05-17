@@ -1,23 +1,26 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin, AbstractUser
 from django.utils import timezone
+
 
 # 헬퍼 클래스
 class UserManager(BaseUserManager):
-    def create_user(self, email, password, **kwargs):
+    def create_user(self, email, nickname, password, **kwargs):
         if not email:
             raise ValueError('Users must have an email address')
         user = self.model(
             email=email,
+            nickname=nickname,
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email=None, password=None, **extra_fields):
+    def create_superuser(self, email, nickname, password=None, **extra_fields):
         superuser = self.create_user(
             email=email,
             password=password,
+            nickname=nickname,
         )
         
         superuser.is_staff = True
@@ -36,9 +39,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     created_at = models.DateTimeField(default=timezone.now)
     last_visit = models.DateTimeField(default=timezone.now, null=True)
-    
-	# 헬퍼 클래스 사용
+
+    # 헬퍼 클래스 사용
     objects = UserManager()
 
-	# 사용자의 username field는 email으로 설정 (이메일로 로그인)
+	# # 사용자의 username field는 email으로 설정 (이메일로 로그인)
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['nickname']
