@@ -23,6 +23,7 @@ from django.conf import settings
 
 schema_url_patterns = [
     path('user/', include('user.urls')),
+    path('plant/', include('plant.urls')),
 ]
 
 schema_view = get_schema_view(
