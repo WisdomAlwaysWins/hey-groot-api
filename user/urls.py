@@ -7,7 +7,7 @@ urlpatterns = [
     path('auth/', include('dj_rest_auth.urls')),
     path('auth/registration/', include('dj_rest_auth.registration.urls')),
     path("auth/delete/", DeleteUserView.as_view(), name="delete"),
-    path('last/', UpdateLastVisitView.as_view(), name='last-visited-update')
+    path('update/', UpdateUserInfoView.as_view(), name='update-user-info')
     # path("login/", CustomLoginView.as_view(), name="login")
     
 ]
