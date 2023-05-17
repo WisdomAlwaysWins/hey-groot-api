@@ -4,19 +4,21 @@ from django.utils import timezone
 
 # 헬퍼 클래스
 class UserManager(BaseUserManager):
-    def create_user(self, email, password, **kwargs):
+    def create_user(self, email, nickname, password, **kwargs):
         if not email:
             raise ValueError('Users must have an email address')
         user = self.model(
             email=email,
+            nickname = nickname,
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email=None, password=None, **extra_fields):
+    def create_superuser(self, email, nickname, password):
         superuser = self.create_user(
             email=email,
+            nickname=nickname,
             password=password,
         )
         
@@ -29,8 +31,8 @@ class UserManager(BaseUserManager):
 
 # AbstractBaseUser를 상속해서 유저 커스텀
 class User(AbstractBaseUser, PermissionsMixin):
-    nickname = models.CharField(max_length=15, null=True)
-    email = models.EmailField(max_length=30, unique=True, null=False, blank=False)
+    nickname = models.CharField(max_length=20, null=True)
+    email = models.EmailField(max_length=255, unique=True, null=False, blank=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
