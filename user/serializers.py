@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework import exceptions
 from django.contrib.auth.models import update_last_login
 from django.contrib.auth import authenticate
+from django.contrib.auth.password_validation import validate_password
 
 UserModel = get_user_model()
 
@@ -17,11 +18,12 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
-        user = User.objects.create_user(
-            email = validated_data['email'],
-            password = validated_data['password']
-        )
-        return user
+        password = validated_data.get("password")
+        instance = self.Meta.model(**validated_data)
+        if password is not None:
+            instance.set_password(password)
+        instance.save()
+        return instance
     
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     """
@@ -29,7 +31,7 @@ class CustomUserDetailsSerializer(UserDetailsSerializer):
     """
     class Meta:
         model = UserModel
-        fields = ('pk', 'email', 'last_login')
+        fields = ('pk', 'email', 'nickname','last_login')
         read_only_fields = ('email', 'last_login' )
         
 
@@ -60,5 +62,5 @@ class UserProfileSerializer(serializers.ModelSerializer):
     last_visit = serializers.DateTimeField(format= '%Y-%m-%d %H:%M:%S')
     class Meta:
         model = User
-        fields = ['last_visit']
+        fields = ['nickname', 'last_visit']
         
