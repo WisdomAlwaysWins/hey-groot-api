@@ -18,11 +18,9 @@ RUN set -ex && \
 
 COPY . /code/
 
-ENV SECRET_KEY "django-insecure-g2cy(da9(aq=3hq85cjhjx2a&whu%$cqmg^_oc5$)*a93)8(6("
-
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
 
 # replace demo.wsgi with <project_name>.wsgi
-CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "config.wsgi"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "demo.wsgi"]
