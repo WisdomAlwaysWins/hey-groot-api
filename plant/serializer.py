@@ -33,9 +33,16 @@ class PartnerDetailSerializer(serializers.ModelSerializer):
     
     class Meta :
         model = Partner
-        fields = ['id', 'character_id', 'name', 'is_alarm', 'pot_color']
+        fields = ['id', 'character_id', 'name', 'purchase_date', 'watering_date', 'is_alarm', 'pot_color']
 
 class PartnerUpdateSerializer(serializers.ModelSerializer):
     class Meta :
         model = Partner
         fields = ['character_id', 'name', 'is_alarm', 'pot_color']
+        
+        
+# class UserProfileSerializer(serializers.ModelSerializer):
+#     last_visit = serializers.DateTimeField(format= '%Y-%m-%d %H:%M:%S')
+#     class Meta:
+#         model = User
+#         fields = ['nickname', 'last_visit']

@@ -30,6 +30,16 @@ class Partner(models.Model):
     name = models.CharField(max_length=100, null=True)
     is_alarm = models.BooleanField(default=True)
     pot_color = ColorField(default='##f5c542')
+    purchase_date  = models.DateTimeField(
+        verbose_name="입양 날짜",
+        null=True,
+        blank=True
+    )
+    watering_date = models.DateTimeField(
+        verbose_name='물 준 날짜',
+        null=True,
+        blank=True
+    )
     
 class Bookmark(models.Model):
     id = models.AutoField(primary_key=True)

@@ -57,12 +57,20 @@ class CharacterViewSet(viewsets.ModelViewSet):
     # 캐릭터 CRUD
     queryset = Character.objects.all()
     serializer_class = CharacterSerializer
-    
+
 class PartnerView(APIView):
     def get(self, request):
-        partner = Partner.objects.get(user_id = request.user)
-        serializer = PartnerDetailSerializer(partner)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        partner = Partner.objects.filter(user_id = request.user)
+        
+        if partner.exists():
+            serializer = PartnerDetailSerializer(partner)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else :
+            return Response({
+                "message" : "캐릭터 설정 전"
+            }, status = status.HTTP_400_BAD_REQUEST)
+        
+
     
     def post(self, request):
         
