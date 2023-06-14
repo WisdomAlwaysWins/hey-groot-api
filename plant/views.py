@@ -84,19 +84,6 @@ class CharacterViewSet(viewsets.ModelViewSet):
 
 class PartnerView(APIView):
     def get(self, request):
-<<<<<<< HEAD
-        partner = Partner.objects.filter(user_id = request.user)
-        
-        if partner.exists():
-            serializer = PartnerDetailSerializer(partner)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        else :
-            return Response({
-                "message" : "캐릭터 설정 전"
-            }, status = status.HTTP_400_BAD_REQUEST)
-        
-
-=======
         partner = Partner.objects.filter(user_id = request.user.id)
         
         if partner:
@@ -108,7 +95,6 @@ class PartnerView(APIView):
             return Response({
                 "message" : "등록된 대화 상대 정보가 없습니다."
             }, status=status.HTTP_400_BAD_REQUEST)
->>>>>>> deploy
     
     def post(self, request):
         request.data._mutable = True
