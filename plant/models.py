@@ -1,6 +1,7 @@
 from django.db import models
 from colorfield.fields import ColorField
 from user.models import User
+from django.utils import timezone
 
 # Create your models here.
 
@@ -52,3 +53,10 @@ class Request(models.Model):
     content = models.TextField('CONTENT')
     reference_photo = models.ImageField(upload_to='request/%Y/%m/%d/', blank=True)
     is_confirm  = models.BooleanField(default=False)
+    
+class Chat(models.Model):
+    id = models.AutoField(primary_key=True)
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_id')
+    question = models.TextField("질문")
+    answer = models.TextField("응답")
+    date = models.DateTimeField(default=timezone.now)

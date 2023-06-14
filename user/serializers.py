@@ -63,4 +63,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['nickname', 'last_visit']
+<<<<<<< HEAD
         
+=======
+        
+>>>>>>> deploy
