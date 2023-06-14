@@ -16,3 +16,7 @@ class BookmarkAdmin(admin.ModelAdmin):
 @admin.register(Request)
 class RequestAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_id', 'content', 'is_confirm')    
+    
+@admin.register(Chat)
+class ChatAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_id', 'question', 'answer')

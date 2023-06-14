@@ -23,4 +23,5 @@ urlpatterns = [
     path('characters/', character_list),
     path('characters/<int:pk>/', character_detail),
     path('partner/', PartnerView.as_view()),
+    path('chat/', ChatView.as_view()),
 ]

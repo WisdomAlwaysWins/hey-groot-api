@@ -39,3 +39,8 @@ class PartnerUpdateSerializer(serializers.ModelSerializer):
     class Meta :
         model = Partner
         fields = ['character_id', 'user_id', 'name', 'is_alarm', 'pot_color']
+        
+class ChatSerializer(serializers.ModelSerializer):
+    class Meta :
+        model = Chat
+        fields = ['id', 'question', 'answer', 'date']

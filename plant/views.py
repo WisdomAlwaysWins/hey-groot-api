@@ -6,7 +6,31 @@ from .models import *
 from .serializer import *
 from user.models import User
 
-# Create your views here.
+import pandas as pd
+import numpy as np
+from numpy import dot
+from numpy.linalg import norm
+from sentence_transformers import SentenceTransformer
+import pickle
+
+MODEL_PATH = 'static/sentence_transformer_model.pkl'
+CSV_PATH = 'static/train_data_with_embeddings.csv'
+
+with open(MODEL_PATH, 'rb') as f:
+    model = pickle.load(f)
+
+train_data = pd.read_csv(CSV_PATH)
+train_data['embedding'] = train_data['embedding'].apply(lambda x: np.array(eval(x)))
+
+#코사인 유사도 계산 함수
+def cosine_similarity(a, b):
+    return dot(a, b) / (norm(a) * norm(b))
+
+def get_response(input_question):
+    input_embedding = model.encode(input_question)
+    similarities = train_data['embedding'].apply(lambda x: cosine_similarity(input_embedding, x))
+    best_match_idx = np.argmax(similarities)
+    return train_data.iloc[best_match_idx]['답변']
 
 class RequestListView(APIView):
     # 사용자 요청 모아보기 
@@ -60,10 +84,17 @@ class CharacterViewSet(viewsets.ModelViewSet):
     
 class PartnerView(APIView):
     def get(self, request):
-        partner = Partner.objects.get(user_id = request.user.id)
-        print("*************      ", partner)
-        serializer = PartnerDetailSerializer(partner)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        partner = Partner.objects.filter(user_id = request.user.id)
+        
+        if partner:
+            # print("*************      ", partner)
+            serializer = PartnerDetailSerializer(partner)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else :
+            # print("*************   없어요 없다구요   ", partner)
+            return Response({
+                "message" : "등록된 대화 상대 정보가 없습니다."
+            }, status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request):
         request.data._mutable = True
@@ -96,5 +127,29 @@ class PartnerView(APIView):
         else :
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+class ChatView(APIView):
+    def post(self, request):
+        question = request.data['question']
         
+        if question :
+            answer = get_response(question)
+            
+            chat = Chat.objects.create(
+                user_id = request.user,
+                question = question,
+                answer = answer,
+                date = timezone.now()
+            )
+            return Response({
+                "message" : answer
+            }, status=status.HTTP_200_OK)
+        else :
+            return Response({
+                
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+    def get(self, request):
+        chat = Chat.objects.filter(user_id = request.user.id)
+        serializer = ChatSerializer(chat, many = True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
     
