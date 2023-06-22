@@ -33,12 +33,12 @@ class PartnerDetailSerializer(serializers.ModelSerializer):
     
     class Meta :
         model = Partner
-        fields = ['id', 'user_id', 'character_id', 'name', 'is_alarm', 'pot_color']
+        fields = ['id', 'user_id', 'character_id', 'plant_id', 'name', 'is_alarm', 'pot_color']
 
 class PartnerUpdateSerializer(serializers.ModelSerializer):
     class Meta :
         model = Partner
-        fields = ['character_id', 'user_id', 'name', 'is_alarm', 'pot_color']
+        fields = ['character_id', 'user_id', 'name', 'plant_id', 'is_alarm', 'pot_color']
         
 class ChatSerializer(serializers.ModelSerializer):
     class Meta :

@@ -28,6 +28,7 @@ class Partner(models.Model):
     id = models.AutoField(primary_key=True),
     user_id = models.ForeignKey(User, related_name='master', on_delete=models.CASCADE, db_column='user_id', null=True)
     character_id = models.ForeignKey(Character, related_name='character', on_delete=models.CASCADE, db_column='character_id')
+    plant_id = models.CharField(max_length=10, null=True, blank=True)
     name = models.CharField(max_length=100, null=True)
     is_alarm = models.BooleanField(default=True)
     pot_color = ColorField(default='##f5c542')

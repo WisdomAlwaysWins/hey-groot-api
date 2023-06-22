@@ -7,7 +7,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_id', 'name', 'character_id', 'is_alarm', 'pot_color')
+    list_display = ('id', 'user_id', 'name', 'character_id', 'plant_id', 'is_alarm', 'pot_color')
     
 @admin.register(Bookmark)
 class BookmarkAdmin(admin.ModelAdmin):
