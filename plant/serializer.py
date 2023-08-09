@@ -44,3 +44,9 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta :
         model = Chat
         fields = ['id', 'question', 'answer', 'date']
+
+class PlantInfoSerializer(serializers.ModelSerializer) :
+  class Meta :
+    model = PlantInfo
+    fields = '__all__'
+    

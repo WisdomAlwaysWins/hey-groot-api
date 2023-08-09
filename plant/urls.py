@@ -16,6 +16,17 @@ character_detail = CharacterViewSet.as_view({
     'delete' : 'destroy'
 })
 
+plantInfo_list = PlantInfoViewSet.as_view({
+  'get' : 'list',
+  'post' : 'create'
+})
+
+plantInfo_detail = PlantInfoViewSet.as_view({
+  'get' : 'retrieve',
+  'put' : 'update',
+  'delete' : 'destroy',
+})
+
 urlpatterns = [
     path('request/', RequestListView.as_view()),
     path('mark/', BookmarkView.as_view()),
@@ -24,4 +35,6 @@ urlpatterns = [
     path('characters/<int:pk>/', character_detail),
     path('partner/', PartnerView.as_view()),
     path('chat/', ChatView.as_view()),
+    path('plants/', plantInfo_list),
+    path('plants/detail/<int:pk>/', plantInfo_detail),
 ]

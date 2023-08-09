@@ -65,6 +65,8 @@ INSTALLED_APPS = [
     'drf_yasg',
     'django_extensions',
     'colorfield',
+    'import_export',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -183,7 +185,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
-    'DATETIME_FORMAT' : '%Y-%m-%d %H:%M:%S'
+    'DATETIME_FORMAT' : '%Y-%m-%d %H:%M:%S',
+    'PAGE_SIZE' : 5,
 }
 
 SIMPLE_JWT = {

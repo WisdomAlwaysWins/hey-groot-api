@@ -5,6 +5,8 @@ from rest_framework import status, viewsets
 from .models import *
 from .serializer import *
 from user.models import User
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import filters
 
 import pandas as pd
 import numpy as np
@@ -152,4 +154,13 @@ class ChatView(APIView):
         chat = Chat.objects.filter(user_id = request.user.id)
         serializer = ChatSerializer(chat, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
+class PlantInfoPagination(PageNumberPagination):
+  page_size = 5
+
+class PlantInfoViewSet(viewsets.ModelViewSet):
+  queryset = PlantInfo.objects.all()
+  serializer_class = PlantInfoSerializer
+  pagination_class = PlantInfoPagination
+  filter_backends = [filters.SearchFilter]
+  search_fields = ['cntntsSj']

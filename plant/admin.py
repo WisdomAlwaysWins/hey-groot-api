@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import *
+from import_export.admin import ExportActionModelAdmin, ImportExportMixin, ImportMixin
 
 @admin.register(Character)
 class CharacterAdmin(admin.ModelAdmin):
@@ -20,3 +21,8 @@ class RequestAdmin(admin.ModelAdmin):
 @admin.register(Chat)
 class ChatAdmin(admin.ModelAdmin):
     list_display = ('id', 'user_id', 'question', 'answer')
+    
+@admin.register(PlantInfo)
+class PlantInfoAdmin(ImportExportMixin, admin.ModelAdmin):
+  ordering = ['id']
+  list_display = ['id', 'cntntsNo', 'cntntsSj']

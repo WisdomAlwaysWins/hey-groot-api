@@ -13,6 +13,38 @@ from django.utils import timezone
 #     extension = filename.split('.')[-1]
 #     return '%s/%s.%s' % (instance.id, pid, extension)
 
+class PlantInfo(models.Model):
+  id = models.AutoField(primary_key=True),
+  cntntsNo = models.IntegerField()
+  cntntsSj = models.CharField(max_length=300, null=True)
+  rtnFileUrl = models.URLField(null=True)	
+  rtnThumbFileUrl = models.URLField(null=True)	
+  growthAra	= models.IntegerField(null=True, blank=True)
+  growthHg = models.IntegerField(null=True, blank=True)	
+  grwhTp = models.CharField(max_length=100, null=True, blank=True)	
+  minTp	= models.IntegerField(null=True, blank=True)
+  maxTp = models.IntegerField(null=True, blank=True)	
+  grwtve = models.IntegerField(null=True, blank=True)	
+  hd = models.CharField(max_length=100, null=True, blank=True)		
+  minHd = models.IntegerField(null=True, blank=True) 	
+  maxHd	= models.IntegerField(null=True, blank=True)
+  ignSeasonCode	= models.CharField(max_length=4, null=True)
+  ignSeason	= models.CharField(max_length=100, null=True, blank=True)	
+  lighttdemanddo = models.CharField(max_length=300, null=True, blank=True)		
+  minLt	= models.IntegerField(null=True, blank=True)
+  maxLt	= models.IntegerField(null=True, blank=True)
+  managedemanddo = models.IntegerField(null=True, blank=True) 	
+  minPstPlc = models.IntegerField(null=True, blank=True)	
+  maxPstPlc = models.IntegerField(null=True, blank=True)	
+  toxcty = models.IntegerField(null=True, blank=True)	
+  watercycleSprng = models.IntegerField(null=True, blank=True)	
+  watercycleSummer = models.IntegerField(null=True, blank=True)	
+  watercycleAutum = models.IntegerField(null=True, blank=True)	
+  watercycleWinter = models.IntegerField(null=True, blank=True)	
+  minWinterTp = models.IntegerField(null=True, blank=True)	
+  maxWinterTp = models.IntegerField(null=True, blank=True)	
+  winterLwetTp = models.CharField(max_length=100, null=True, blank=True)	
+
 class Character(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
