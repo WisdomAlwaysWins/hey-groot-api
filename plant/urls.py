@@ -37,4 +37,5 @@ urlpatterns = [
     path('chat/', ChatView.as_view()),
     path('plants/', plantInfo_list),
     path('plants/detail/<int:pk>/', plantInfo_detail),
+    path('data/', ScheduledPlantDataView.as_view()),
 ]

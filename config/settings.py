@@ -36,7 +36,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-CSRF_TRUSTED_ORIGINS = ['https://*.fly.dev']  
+CSRF_TRUSTED_ORIGINS = ['http://3.20.48.164:8000']  
 
 # Application definition
 

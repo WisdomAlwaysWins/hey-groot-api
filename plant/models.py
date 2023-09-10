@@ -44,6 +44,9 @@ class PlantInfo(models.Model):
   minWinterTp = models.IntegerField(null=True, blank=True)	
   maxWinterTp = models.IntegerField(null=True, blank=True)	
   winterLwetTp = models.CharField(max_length=100, null=True, blank=True)	
+  
+  def __str__(self) :
+    return self.cntntsSj
 
 class Character(models.Model):
     id = models.AutoField(primary_key=True)
@@ -60,7 +63,8 @@ class Partner(models.Model):
     id = models.AutoField(primary_key=True),
     user_id = models.ForeignKey(User, related_name='master', on_delete=models.CASCADE, db_column='user_id', null=True)
     character_id = models.ForeignKey(Character, related_name='character', on_delete=models.CASCADE, db_column='character_id')
-    plant_id = models.CharField(max_length=10, null=True, blank=True)
+    plant_id = models.ForeignKey(PlantInfo, related_name='plant', on_delete=models.CASCADE, db_column='plant_id', null=True)
+    # plant_id = models.CharField(max_length=10, null=True, blank=True)
     name = models.CharField(max_length=100, null=True)
     is_alarm = models.BooleanField(default=True)
     pot_color = ColorField(default='##f5c542')
@@ -74,6 +78,10 @@ class Partner(models.Model):
         null=True,
         blank=True
     )
+    
+    def __str__(self) :
+      return self.name
+    
     
 class Bookmark(models.Model):
     id = models.AutoField(primary_key=True)
@@ -93,3 +101,13 @@ class Chat(models.Model):
     question = models.TextField("질문")
     answer = models.TextField("응답")
     date = models.DateTimeField(default=timezone.now)
+    
+class ScheduledPlantData(models.Model):
+  id = models.AutoField(primary_key=True)
+  partner_id = models.ForeignKey(Partner, related_name='partner', on_delete=models.CASCADE, db_column='partner_id')
+  date = models.DateTimeField(auto_now_add=True, null=True)
+  light = models.IntegerField(null=True, blank=True) # 조도 	
+  humid = models.IntegerField(null=True, blank=True) # 습도
+  temp = models.IntegerField(null=True, blank=True) # 온도
+  soil = models.IntegerField(null=True, blank=True) # 토양 수분
+  

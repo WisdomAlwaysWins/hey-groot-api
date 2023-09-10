@@ -26,3 +26,7 @@ class ChatAdmin(admin.ModelAdmin):
 class PlantInfoAdmin(ImportExportMixin, admin.ModelAdmin):
   ordering = ['id']
   list_display = ['id', 'cntntsNo', 'cntntsSj']
+  
+@admin.register(ScheduledPlantData)
+class ScheduledPlantDataAdmin(admin.ModelAdmin) :
+  list_display = ('id', 'partner_id', 'light', 'humid', 'temp', 'soil', 'date')

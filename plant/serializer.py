@@ -1,6 +1,11 @@
 from rest_framework import serializers
 from .models import *
 
+class PlantInfoSerializer(serializers.ModelSerializer) :
+  class Meta :
+    model = PlantInfo
+    fields = '__all__'
+    
 class RequestSerializer(serializers.ModelSerializer):
     reference_photo = serializers.ImageField(use_url=True)
     
@@ -30,7 +35,7 @@ class CharacterSerializer(serializers.ModelSerializer):
         
 class PartnerDetailSerializer(serializers.ModelSerializer):
     character_id = CharacterSerializer()
-    
+    plant_id = PlantInfoSerializer()
     class Meta :
         model = Partner
         fields = ['id', 'user_id', 'character_id', 'plant_id', 'name', 'is_alarm', 'pot_color']
@@ -44,9 +49,20 @@ class ChatSerializer(serializers.ModelSerializer):
     class Meta :
         model = Chat
         fields = ['id', 'question', 'answer', 'date']
-
-class PlantInfoSerializer(serializers.ModelSerializer) :
+  
+class ScheduledPlantDataSerializer(serializers.ModelSerializer) :
   class Meta :
-    model = PlantInfo
+    model = ScheduledPlantData
     fields = '__all__'
     
+class ScheduledPlantDataDetailSerializer(serializers.ModelSerializer):
+  class Meta :
+    model = ScheduledPlantData
+    fields = ['date', 'light', 'humid', 'temp', 'soil']
+
+class PartnerScheduledDataSerializer(serializers.Serializer) :
+  partner = PartnerDetailSerializer()
+  datas = ScheduledPlantDataDetailSerializer(many=True)
+  # class Meta :
+  #   model = ScheduledPlantData
+  #   fields = '__all__'
