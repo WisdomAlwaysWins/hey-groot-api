@@ -177,14 +177,25 @@ class PartnerView(APIView):
         
     
     def patch(self, request):
-        partner = Partner.objects.get(user_id = request.user.id)
+      
+        partner = Partner.objects.get(user_id = request.user, id = request.data['partner_id'])  
+        print(partner)
+        
         serializer = PartnerUpdateSerializer(partner, request.data, partial=True)
+        
         serializer.is_valid()
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_200_OK)
         else :
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response(
+          {'mesg' : 'hi'},
+          status = status.HTTP_200_OK
+        )
+        
+
 
 class ChatView(APIView):
   def post(self, request):
