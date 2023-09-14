@@ -14,7 +14,7 @@ from django.utils import timezone
 #     return '%s/%s.%s' % (instance.id, pid, extension)
 
 class PlantInfo(models.Model):
-  id = models.AutoField(primary_key=True),
+  id = models.AutoField(primary_key=True)
   cntntsNo = models.IntegerField()
   cntntsSj = models.CharField(max_length=300, null=True)
   rtnFileUrl = models.URLField(null=True)	
@@ -85,8 +85,8 @@ class Partner(models.Model):
     
 class Bookmark(models.Model):
     id = models.AutoField(primary_key=True)
-    user_id = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE, db_column='user_id')
-    plant_id = models.CharField(max_length=10, null=False, blank=False)
+    user = models.ForeignKey(User, related_name='user', on_delete=models.CASCADE, db_column='user_id')
+    plantinfo = models.ForeignKey(PlantInfo, on_delete=models.CASCADE)
     
 class Request(models.Model):
     id = models.AutoField(primary_key=True)

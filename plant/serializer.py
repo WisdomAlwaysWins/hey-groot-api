@@ -6,6 +6,11 @@ class PlantInfoSerializer(serializers.ModelSerializer) :
     model = PlantInfo
     fields = '__all__'
     
+class PlantInfoSimpleSerializer(serializers.ModelSerializer):
+  class Meta :
+    model = PlantInfo
+    fields = ['id', 'cntntsNo', 'cntntsSj', 'rtnFileUrl', 'rtnThumbFileUrl']
+    
 class RequestSerializer(serializers.ModelSerializer):
     reference_photo = serializers.ImageField(use_url=True)
     
@@ -19,9 +24,13 @@ class RequestCreateSerializer(serializers.ModelSerializer):
         fields = ['content', 'reference_photo', 'is_confirm']
 
 class BookmarkSerializer(serializers.ModelSerializer):
+    plantinfo = PlantInfoSimpleSerializer()
+  
     class Meta :
         model = Bookmark
-        fields = ['id', 'user_id', 'plant_id']
+        fields = ['id', 'user', 'plantinfo']
+
+
         
 class CharacterSerializer(serializers.ModelSerializer):
     basic_emo = serializers.ImageField(use_url=True)

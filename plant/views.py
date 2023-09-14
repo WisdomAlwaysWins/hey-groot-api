@@ -110,17 +110,21 @@ class RequestListView(APIView):
 class BookmarkView(APIView):
     # 북마크 등록/해제
     def post(self, request):
-        bookmark = Bookmark.objects.filter(plant_id = request.data['plant_id'], user_id = request.user)
         
-        if bookmark :
-            bookmark[0].delete()
-            message = '북마크 해제'
+        p = PlantInfo.objects.get(id = request.data['plant_id'])
+        
+        bookmark = Bookmark.objects.filter(user_id = request.user.id, plantinfo = p)
+        
+        if bookmark : 
+          bookmark[0].delete()
+          message = '북마크 해제'
         else :
-            Bookmark.objects.create(
-                user_id = request.user,
-                plant_id = request.data['plant_id'],
-            )
-            message = '북마크 등록'
+          Bookmark.objects.create(
+            user = request.user,
+            plantinfo = p,
+          )
+          message = '북마크 등록'
+
         return Response({
             "message" : message
         }, status = status.HTTP_200_OK)
