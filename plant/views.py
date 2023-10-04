@@ -43,13 +43,18 @@ def get_most_similar_question(query):
     most_similar_idx = np.argmax(similarities)
     return list(data.keys())[most_similar_idx]
 
-def get_response(query):
+def get_response(query, user):
+  
+    partner = Partner.objects.filter(user_id = user).first()
+    
+    scheduledData = ScheduledPlantData.objects.filter(partner_id = partner).last()
+  
     # 고정된 센서 값
     sensor_values = {
-        '${l}': 40000, # 조도 (나옴)
-        '${t}': 25, # 온도 (나옴)
-        '${h}': 40, # 습도 (나오면 안됨)
-        '${m}': 60 # 수분 (나오면 안됨)
+        '${l}': scheduledData.light, # 조도 (나옴)
+        '${t}': scheduledData.temp, # 온도 (나옴)
+        '${h}': scheduledData.humid, # 습도 (나오면 안됨)
+        '${m}': scheduledData.soil # 수분 (나오면 안됨)
     }
 
     # 센서 값에 따른 임계값
@@ -202,7 +207,7 @@ class ChatView(APIView):
       question = request.data['question']
       
       if question :
-          answer = get_response(question)
+          answer = get_response(question, request.user)
           
           chat = Chat.objects.create(
               user_id = request.user,
@@ -254,5 +259,24 @@ class ScheduledPlantDataView(APIView):
         "message" : "등록된 파트너 정보가 없습니다."
       }, status=status.HTTP_400_BAD_REQUEST)
 
-  # def post(self, request):
+  def post(self, request) :
+  
     
+    print("************** ")
+    
+    serializer = ScheduledPlantDataDetailSerializer(data=request.data)
+    
+    if serializer.is_valid() :
+      ScheduledData = ScheduledPlantData.objects.create(
+        partner_id = Partner.objects.get(id = request.data['partner_id']),
+        # date = request.data['date'],
+        light = request.data['light'],
+        humid = request.data['humid'],
+        temp = request.data['temp'],
+        soil = request.data['soil']
+      )
+      return Response(serializer.data, status = status.HTTP_201_CREATED)
+      
+    else : 
+      return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+  

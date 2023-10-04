@@ -67,7 +67,7 @@ class ScheduledPlantDataSerializer(serializers.ModelSerializer) :
 class ScheduledPlantDataDetailSerializer(serializers.ModelSerializer):
   class Meta :
     model = ScheduledPlantData
-    fields = ['date', 'light', 'humid', 'temp', 'soil']
+    fields = ['partner_id', 'date', 'light', 'humid', 'temp', 'soil']
 
 class PartnerScheduledDataSerializer(serializers.Serializer) :
   partner = PartnerDetailSerializer()
