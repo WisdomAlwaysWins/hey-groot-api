@@ -106,8 +106,8 @@ class ScheduledPlantData(models.Model):
   id = models.AutoField(primary_key=True)
   partner_id = models.ForeignKey(Partner, related_name='partner', on_delete=models.CASCADE, db_column='partner_id')
   date = models.DateTimeField(auto_now_add=True, null=True)
-  light = models.IntegerField(null=True, blank=True) # 조도 	
-  humid = models.IntegerField(null=True, blank=True) # 습도
-  temp = models.IntegerField(null=True, blank=True) # 온도
+  light = models.FloatField(null=True, blank=True) # 조도 	
+  humid = models.FloatField(null=True, blank=True) # 습도
+  temp = models.FloatField(null=True, blank=True) # 온도
   soil = models.IntegerField(null=True, blank=True) # 토양 수분
   

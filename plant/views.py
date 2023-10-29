@@ -7,6 +7,7 @@ from .serializer import *
 from user.models import User
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
+from datetime import datetime
 
 import pandas as pd
 import numpy as np
@@ -260,23 +261,67 @@ class ScheduledPlantDataView(APIView):
       }, status=status.HTTP_400_BAD_REQUEST)
 
   def post(self, request) :
-  
+
+    partner_id = Partner.objects.get(id = request.data['partner_id'])
+    light = float(request.data['light'])
+    humid = float(request.data['humid'])
+    temp = float(request.data['temp'],)
+    soil = int(request.data['soil'])
     
-    print("************** ")
+    soil_percentage = int((soil - 150) / (1023 - 150) * 100)
     
-    serializer = ScheduledPlantDataDetailSerializer(data=request.data)
+    lastest_data = ScheduledPlantData.objects.filter(partner_id = partner_id).last()
     
-    if serializer.is_valid() :
-      ScheduledData = ScheduledPlantData.objects.create(
-        partner_id = Partner.objects.get(id = request.data['partner_id']),
-        # date = request.data['date'],
-        light = request.data['light'],
-        humid = request.data['humid'],
-        temp = request.data['temp'],
-        soil = request.data['soil']
-      )
-      return Response(serializer.data, status = status.HTTP_201_CREATED)
+    new_data = {
+      'partner_id' : request.data['partner_id'],
+      'light' : light,
+      'humid' :  humid ,
+      'temp' : temp,
+      'soil' : soil_percentage,
+    }
+    
+    flag = 0
+    
+    if abs(lastest_data.light - light) > 50 :
+      new_data[light] = light
+      flag = 1
+    if abs(lastest_data.humid - humid) > 10 :
+      new_data[humid] = humid
+      flag = 1
+    if abs(lastest_data.temp - temp) > 3 :
+      new_data[temp] = temp
+      flag = 1
+    if abs(lastest_data.soil - soil_percentage) > 5 :
+      new_data[soil] = soil
+      flag = 1
       
+    serializer = ScheduledPlantDataDetailSerializer(data=new_data)
+      
+    if serializer.is_valid() :
+      if flag == 1 :
+        ScheduledData = ScheduledPlantData.objects.create(
+          partner_id = Partner.objects.get(id = request.data['partner_id']),
+          # date = request.data['date'],
+          light = request.data['light'],
+          humid = request.data['humid'],
+          temp = request.data['temp'],
+          soil = soil_percentage
+        )
+        return Response(serializer.data, status = status.HTTP_201_CREATED)
+      else :
+        date_diff = datetime.now() - lastest_data.date
+        if (date_diff.seconds / 60) > 30 :
+          ScheduledData = ScheduledPlantData.objects.create(
+            partner_id = Partner.objects.get(id = request.data['partner_id']),
+            # date = request.data['date'],
+            light = request.data['light'],
+            humid = request.data['humid'],
+            temp = request.data['temp'],
+            soil = soil_percentage
+          )
+          return Response(serializer.data, status = status.HTTP_201_CREATED)
+        return Response({"msg" : "nothing change"}, status = status.HTTP_200_OK)
     else : 
       return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
-  
+
+
