@@ -270,8 +270,6 @@ class ScheduledPlantDataView(APIView):
     
     soil_percentage = int((soil - 150) / (1023 - 150) * 100)
     
-    lastest_data = ScheduledPlantData.objects.filter(partner_id = partner_id).last()
-    
     new_data = {
       'partner_id' : request.data['partner_id'],
       'light' : light,
@@ -280,37 +278,41 @@ class ScheduledPlantDataView(APIView):
       'soil' : soil_percentage,
     }
     
-    flag = 0
+    lastest_data = ScheduledPlantData.objects.filter(partner_id = partner_id).last()
     
-    if abs(lastest_data.light - light) > 50 :
-      new_data[light] = light
-      flag = 1
-    if abs(lastest_data.humid - humid) > 10 :
-      new_data[humid] = humid
-      flag = 1
-    if abs(lastest_data.temp - temp) > 3 :
-      new_data[temp] = temp
-      flag = 1
-    if abs(lastest_data.soil - soil_percentage) > 5 :
-      new_data[soil] = soil
-      flag = 1
+    if lastest_data == None :
+      serializer = ScheduledPlantDataDetailSerializer(data=new_data)
       
-    serializer = ScheduledPlantDataDetailSerializer(data=new_data)
-      
-    if serializer.is_valid() :
-      if flag == 1 :
+      if serializer.is_valid() :
         ScheduledData = ScheduledPlantData.objects.create(
-          partner_id = Partner.objects.get(id = request.data['partner_id']),
-          # date = request.data['date'],
-          light = request.data['light'],
-          humid = request.data['humid'],
-          temp = request.data['temp'],
-          soil = soil_percentage
-        )
+            partner_id = Partner.objects.get(id = request.data['partner_id']),
+            # date = request.data['date'],
+            light = request.data['light'],
+            humid = request.data['humid'],
+            temp = request.data['temp'],
+            soil = soil_percentage
+          )
         return Response(serializer.data, status = status.HTTP_201_CREATED)
-      else :
-        date_diff = datetime.now() - lastest_data.date
-        if (date_diff.seconds / 60) > 30 :
+    else :
+      flag = 0
+      
+      if abs(lastest_data.light - light) > 50 :
+        new_data[light] = light
+        flag = 1
+      if abs(lastest_data.humid - humid) > 10 :
+        new_data[humid] = humid
+        flag = 1
+      if abs(lastest_data.temp - temp) > 3 :
+        new_data[temp] = temp
+        flag = 1
+      if abs(lastest_data.soil - soil_percentage) > 5 :
+        new_data[soil] = soil
+        flag = 1
+        
+      serializer = ScheduledPlantDataDetailSerializer(data=new_data)
+        
+      if serializer.is_valid() :
+        if flag == 1 :
           ScheduledData = ScheduledPlantData.objects.create(
             partner_id = Partner.objects.get(id = request.data['partner_id']),
             # date = request.data['date'],
@@ -320,8 +322,20 @@ class ScheduledPlantDataView(APIView):
             soil = soil_percentage
           )
           return Response(serializer.data, status = status.HTTP_201_CREATED)
-        return Response({"msg" : "nothing change"}, status = status.HTTP_200_OK)
-    else : 
-      return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
+        else :
+          date_diff = datetime.now() - lastest_data.date
+          if (date_diff.seconds / 60) > 30 :
+            ScheduledData = ScheduledPlantData.objects.create(
+              partner_id = Partner.objects.get(id = request.data['partner_id']),
+              # date = request.data['date'],
+              light = request.data['light'],
+              humid = request.data['humid'],
+              temp = request.data['temp'],
+              soil = soil_percentage
+            )
+            return Response(serializer.data, status = status.HTTP_201_CREATED)
+          return Response({"msg" : "nothing change"}, status = status.HTTP_200_OK)
+      else : 
+        return Response(serializer.errors, status = status.HTTP_400_BAD_REQUEST)
 
 
