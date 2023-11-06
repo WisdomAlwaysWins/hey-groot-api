@@ -1,0 +1,159 @@
+{
+  "plants": {
+    "산세베리아의 온도 및 습도, 수분, 햇빛량": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": -10, "high": 0},
+            "humidity": {"low": 20, "high": 80},
+            "illumination": {"low": 0, "high": 200},
+            "moisture": {"low": 0, "high": 30}
+          },
+          "response": {
+            "0": "실내에 머무르세요",
+            "1": "추우니까 여기 있어요!"
+          }
+        },
+        {
+          "conditions": {
+            "temperature": {"low": 1, "high": 10},
+            "humidity": {"low": 20, "high": 80},
+            "illumination": {"low": 0, "high": 500},
+            "moisture": {"low": 0, "high": 40}
+          },
+          "response": {
+            "0": "현재 온도는 ${temperature}도로 실내에 머무르는게 좋을 것 같아요!",
+            "1": "현재 온도는 ${temperature}도로 자켓을 입으셔야 할 것 같아요!",
+            "2": "현재 온도는 ${temperature}도로 너무 쌀쌀한 것 같아요.",
+            "3": "현재 온도는 ${temperature}도로 밖이 너무 추워요.",
+            "4": "현재 저의 습도는 ${humidity}%로 굉장히 적합한 습도를 유지하고 있어요!",
+            "5": "현재 저의 습도는 ${humidity}%로 너무 상쾌해요.",
+            "6": "현재 저의 습도는 ${humidity}%로 너무 상쾌해요.",
+            "7": "저의 햇빛량은 ${illumination}lux로 굉장히 좋은 밝기를 유지하고 있어요."
+
+          }
+        }
+      ]
+    },
+    "스투키": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 20, "high": 30},
+            "humidity": {"low": 50, "high": 90},
+            "illumination": {"low": 300, "high": 800},
+            "moisture": {"low": 20, "high": 60}
+          },
+          "response": {
+            "0": "실내에 머무르세요",
+            "1": "추우니까 여기 있어요!"
+          }
+        }
+      ]
+    },
+    "스파티필름": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 16, "high": 26},
+            "humidity": {"low": 40, "high": 70},
+            "illumination": {"low": 500, "high": 800},
+            "moisture": {"low": 10, "high": 40}
+          },
+          "response": {}
+        }
+      ]
+    },
+    "스킨답서스": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 21, "high": 25},
+            "humidity": {"low": 40, "high": 70},
+            "illumination": {"low": 500, "high": 800},
+            "moisture": {"low": 30, "high": 50}
+          },
+          "response": {}
+        }
+      ]
+    },
+    "몬스테라": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 15, "high": 25},
+            "humidity": {"low": 50, "high": 70},
+            "illumination": {"low": 500, "high": 800},
+            "moisture": {"low": 30, "high": 50}
+          },
+          "response": {}
+        }
+      ]
+    },
+    "콩고": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 20, "high": 26},
+            "humidity": {"low": 40, "high": 70},
+            "illumination": {"low": 500, "high": 800},
+            "moisture": {"low": 30, "high": 50}
+          },
+          "response": {}
+        }
+      ]
+    },
+    "금전수": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 15, "high": 30},
+            "humidity": {"low": 40, "high": 70},
+            "illumination": {"low": 500, "high": 800},
+            "moisture": {"low": 30, "high": 50}
+          },
+          "response": {}
+        }
+      ]
+    },
+    "테이블야자": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 21, "high": 25},
+            "humidity": {"low": 40, "high": 70},
+            "illumination": {"low": 500, "high": 800},
+            "moisture": {"low": 30, "high": 50}
+          },
+          "response": {}
+        }
+      ]
+    },
+    "스노우 사파이어": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 21, "high": 25},
+            "humidity": {"low": 40, "high": 70},
+            "illumination": {"low": 500, "high": 800},
+            "moisture": {"low": 30, "high": 50}
+          },
+          "response": {}
+        }
+      ]
+    },
+    "바질": {
+      "environment_responses": [
+        {
+          "conditions": {
+            "temperature": {"low": 21, "high": 25},
+            "humidity": {"low": 40, "high": 70},
+            "illumination": {"low": 800, "high": 1600},
+            "moisture": {"low": 30, "high": 50}
+          },
+          "response": {}
+        }
+      ]
+    }
+  }
+}

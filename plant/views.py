@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
@@ -8,25 +9,53 @@ from user.models import User
 from rest_framework.pagination import PageNumberPagination
 from rest_framework import filters
 from datetime import datetime
+from langchain.llms import OpenAI
+from langchain.chat_models import ChatOpenAI
+from langchain.chains.conversation.memory import ConversationBufferWindowMemory
+from langchain.agents import Tool
+from langchain.agents import initialize_agent
+from langchain.tools import BaseTool
+from .response_generator import ResponseGenerator
+from .chatbot_name import ChatBotName
+from .plant_info import PlantInfo as PI
+from .plant_for_sensor import PlantSensor
+from langchain.agents import AgentType
+from pathlib import Path
+import environ
 
 import pandas as pd
 import numpy as np
 from numpy import dot
 from numpy.linalg import norm
 from sentence_transformers import SentenceTransformer
+from langchain.tools import BaseTool
 import pickle
 import json
 import random
+
 
 MODEL_PATH = 'static/sentence_transformer_model.pkl'
 JSON_PATH = 'static/embedding_data.json'
 
 with open(MODEL_PATH, 'rb') as f:
-     model = pickle.load(f)
+  model = pickle.load(f)
 
-# JSON 데이터 로딩
 with open(JSON_PATH, 'r') as f:
     data = json.load(f)
+    
+# secret key 설정
+BASE_DIR = Path(__file__).resolve().parent.parent
+env = environ.Env()
+environ.Env.read_env(BASE_DIR / '.env')  
+SECRET_KEY = env('SECRET_KEY')
+# load_dotenv()
+
+# LangChain 클래스
+
+'''
+
+  이전 대화 코드 
+  
 
 def get_most_similar_question(query):
     # 사용자로부터 입력 받은 질문을 임베딩
@@ -91,7 +120,7 @@ def get_response(query, user):
                         response_text = response_text.replace(lit, str(value))
 
     return response_text
-
+'''
 
 class RequestListView(APIView):
     # 사용자 요청 모아보기 
@@ -166,7 +195,6 @@ class PartnerView(APIView):
         request.data['user_id'] = request.user.id
         request.data._mutable = False
         partner = Partner.objects.filter(user_id = request.user)
-        print(partner)
         
         if partner.exists() :
             return Response({
@@ -185,7 +213,6 @@ class PartnerView(APIView):
     def patch(self, request):
       
         partner = Partner.objects.get(user_id = request.user, id = request.data['partner_id'])  
-        print(partner)
         
         serializer = PartnerUpdateSerializer(partner, request.data, partial=True)
         
@@ -201,29 +228,88 @@ class PartnerView(APIView):
           status = status.HTTP_200_OK
         )
         
-
-
 class ChatView(APIView):
-  def post(self, request):
-      question = request.data['question']
+  
+  def post(self, request): # 대화
+    partner = Partner.objects.filter(user_id = request.user.id).last()
+    partnerName = partner.name
+    
+    datas = ScheduledPlantData.objects.filter(partner_id = partner).last()
+    
+    t = datas.temp
+    h = datas.humid
+    i = datas.light
+    m = datas.soil
+    
+    data = [t, h, i, m]
+    
+    ChatBotName_tool = Tool(
+      name="chatbot_name",
+      func=ChatBotName(partner_name=partnerName).run,
+      description = """이름을 묻거나 인사를 할 때 사용하는 도구 예를 들자면 반가워, 안녕?, 너의 이름은 뭐야?, 너는 누구야?, 넌 누구니?"""
+    )
+    
+    response_tool = Tool(
+      name="response_generator",
+      func=ResponseGenerator().run,
+      description="""일상적인 대화 시 사용하는 도구"""
+    )
+
+    sensor_tool = Tool(
+        name='sensor_tool',
+        func= PlantSensor(data=data).run,
+        description="""조건에 맞는 응답을 가져올 때 사용하는 도구이다(사용자의 입력에 "온도","습도"가 포함되면 무조건 사용). 이때, 배열에 있는 응답 중 하나를 랜덤으로 추출하고 그대로 응답한다. (실제로 센서 값을 받아오는 게 아님 huminity = 습도, temperature = 온도)"""
+    )
+
+    plant_info_tool = Tool(
+        name='plant_info_tool',
+        func= PI().run,
+        description="""It's a good tool to use when asking about plant information. Summarize it in 100 characters"""
+    )
+    
+    
+
+    tools = [response_tool ,sensor_tool, plant_info_tool, ChatBotName_tool]
+
+    memory = ConversationBufferWindowMemory(
+        memory_key='chat_history',
+        k=5,
+        return_messages=True
+    )
+
+    # create our agent
+    conversational_agent = initialize_agent(
+        agent=AgentType.OPENAI_FUNCTIONS,
+        tools=tools,
+        llm=ChatOpenAI(temperature=0.1, model="gpt-3.5-turbo"),
+        verbose=False,
+        max_iterations=5,
+        early_stopping_method='generate',
+        memory=memory
+    )
+  
+  
       
-      if question :
-          answer = get_response(question, request.user)
-          
-          chat = Chat.objects.create(
-              user_id = request.user,
-              question = question,
-              answer = answer,
-              date = timezone.now()
-          )
-          return Response({
-              "message" : answer
-          }, status=status.HTTP_200_OK)
-      else :
-          return Response({
-              
-          }, status=status.HTTP_400_BAD_REQUEST)
+    question = request.data['question']
+      
+    if question :
+        # answer = get_response(question, request.user)
+        answer = conversational_agent.run(question)
+        
+        chat = Chat.objects.create(
+            user_id = request.user,
+            question = question,
+            answer = answer,
+            date = timezone.now()
+        )
+        return Response({
+            "message" : answer
+        }, status=status.HTTP_200_OK)
+    else :
+        return Response({
             
+        }, status=status.HTTP_400_BAD_REQUEST)
+          
   def get(self, request):
       chat = Chat.objects.filter(user_id = request.user.id)
       serializer = ChatSerializer(chat, many = True)
@@ -255,7 +341,6 @@ class ScheduledPlantDataView(APIView):
       return Response(serializer.data, status=status.HTTP_200_OK)
       
     else : 
-      # print("*************   없어요 없다구요   ", partner)
       return Response({
         "message" : "등록된 파트너 정보가 없습니다."
       }, status=status.HTTP_400_BAD_REQUEST)
