@@ -47,7 +47,7 @@ with open(JSON_PATH, 'r') as f:
 BASE_DIR = Path(__file__).resolve().parent.parent
 env = environ.Env()
 environ.Env.read_env(BASE_DIR / '.env')  
-SECRET_KEY = env('SECRET_KEY')
+# SECRET_KEY = env('SECRET_KEY')
 # load_dotenv()
 
 # LangChain 클래스
@@ -266,8 +266,6 @@ class ChatView(APIView):
         func= PI().run,
         description="""It's a good tool to use when asking about plant information. Summarize it in 100 characters"""
     )
-    
-    
 
     tools = [response_tool ,sensor_tool, plant_info_tool, ChatBotName_tool]
 
@@ -287,9 +285,7 @@ class ChatView(APIView):
         early_stopping_method='generate',
         memory=memory
     )
-  
-  
-      
+
     question = request.data['question']
       
     if question :
@@ -353,14 +349,12 @@ class ScheduledPlantDataView(APIView):
     temp = float(request.data['temp'],)
     soil = int(request.data['soil'])
     
-    soil_percentage = int((soil - 150) / (1023 - 150) * 100)
-    
     new_data = {
       'partner_id' : request.data['partner_id'],
       'light' : light,
       'humid' :  humid ,
       'temp' : temp,
-      'soil' : soil_percentage,
+      'soil' : soil,
     }
     
     lastest_data = ScheduledPlantData.objects.filter(partner_id = partner_id).last()
@@ -375,7 +369,7 @@ class ScheduledPlantDataView(APIView):
             light = request.data['light'],
             humid = request.data['humid'],
             temp = request.data['temp'],
-            soil = soil_percentage
+            soil = soil,
           )
         return Response(serializer.data, status = status.HTTP_201_CREATED)
     else :
@@ -390,7 +384,7 @@ class ScheduledPlantDataView(APIView):
       if abs(lastest_data.temp - temp) > 3 :
         new_data[temp] = temp
         flag = 1
-      if abs(lastest_data.soil - soil_percentage) > 5 :
+      if abs(lastest_data.soil - soil) > 5 :
         new_data[soil] = soil
         flag = 1
         
@@ -404,7 +398,7 @@ class ScheduledPlantDataView(APIView):
             light = request.data['light'],
             humid = request.data['humid'],
             temp = request.data['temp'],
-            soil = soil_percentage
+            soil = soil
           )
           return Response(serializer.data, status = status.HTTP_201_CREATED)
         else :
@@ -416,7 +410,7 @@ class ScheduledPlantDataView(APIView):
               light = request.data['light'],
               humid = request.data['humid'],
               temp = request.data['temp'],
-              soil = soil_percentage
+              soil = soil
             )
             return Response(serializer.data, status = status.HTTP_201_CREATED)
           return Response({"msg" : "nothing change"}, status = status.HTTP_200_OK)
