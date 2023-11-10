@@ -20,7 +20,7 @@ class RequestAdmin(admin.ModelAdmin):
     
 @admin.register(Chat)
 class ChatAdmin(admin.ModelAdmin):
-    list_display = ('id', 'user_id', 'question', 'answer')
+    list_display = ('id', 'user_id', 'question', 'answer', 'date')
     
 @admin.register(PlantInfo)
 class PlantInfoAdmin(ImportExportMixin, admin.ModelAdmin):

@@ -232,6 +232,12 @@ class ChatView(APIView):
   
   def post(self, request): # 대화
     partner = Partner.objects.filter(user_id = request.user.id).last()
+    
+    if partner == None :
+      return Response({
+        "message" : "현재 등록된 식물이 없어 대화를 진행할 수 없습니다. 식물 정보를 등록해주세요."
+      }, status=status.HTTP_400_BAD_REQUEST)
+      
     partnerName = partner.name
     
     datas = ScheduledPlantData.objects.filter(partner_id = partner).last()
