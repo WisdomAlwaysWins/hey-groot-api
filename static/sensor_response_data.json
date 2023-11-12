@@ -82,11 +82,20 @@
         {
           "conditions": {
             "temperature": {"low": 15, "high": 25},
-            "humidity": {"low": 50, "high": 70},
-            "illumination": {"low": 500, "high": 800},
-            "moisture": {"low": 30, "high": 50}
+            "humidity": {"low": 65, "high": 100},
+            "illumination": {"low": 800, "high": 1000},
+            "moisture": {"low": 50, "high": 100}
           },
-          "response": {}
+          "response": {
+            "0": "현재 온도는 ${temperature}도로 실내에 머무르는게 좋을 것 같아요!",
+            "1": "현재 온도는 ${temperature}도로 조금 쌀쌀해요",
+            "2": "현재 온도는 ${temperature}도로 너무 쌀쌀한 것 같아요.",
+            "3": "현재 온도는 ${temperature}도로 밖이 너무 추워요.",
+            "4": "현재 저의 습도는 ${humidity}%로 굉장히 적합한 습도를 유지하고 있어요!",
+            "5": "현재 저의 습도는 ${humidity}%로 너무 상쾌해요.",
+            "6": "현재 저의 습도는 ${humidity}%로 너무 상쾌해요.",
+            "7": "저의 햇빛량은 ${illumination}lux로 굉장히 좋은 밝기를 유지하고 있어요."
+          }
         }
       ]
     },
@@ -155,5 +164,15 @@
         }
       ]
     }
+  },
+  "responses" : {
+    "0": "제가 있는 곳은 ${temperature}도로 딱 좋아요!", 
+    "1": "${temperature}도는 저에게 조금 쌀쌀해요. 조금 더 따뜻한 곳으로 옮겨주세요!",
+    "2": "${temperature}도는 너무 쌀쌀해요. 햇빛이 드는 곳이 좋아요.",
+    "3": "현재 온도는 ${temperature}도로 너무 추워요. 제가 있는 곳을 따뜻하게 만들어줄 방법은 없나요?",
+    "4": "현재 습도는 ${humidity}%로 굉장히 적합한 습도를 유지하고 있어요!",
+    "5": "현재 습도는 ${humidity}%로 수분 흡수가 아주 잘되는 환경이에요.",
+    "6": "현재 습도는 ${humidity}%로 아주 좋아요.",
+    "7": "제가 있는 곳은 ${illumination}lux로 제가 자라기에 아주 좋은 환경이에요!."
   }
 }

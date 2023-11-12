@@ -17,29 +17,31 @@ class PlantSensor(BaseTool):
     name = "Plant_For_Sensor"
     description = """조건에 맞는 응답을 가져올 때 사용하는 도구이다. 이때, 배열에 있는 응답 중 하나를 랜덤으로 추출하고 그대로 응답한다."""  
     data : list
+    plant_type : str
     
-    def __init__(self, data : list = [0,0,0,0]) :
-      super(PlantSensor, self).__init__(data = data)
-      print(data)
-
+    def __init__(self, data : list = [0,0,0,0], plant_type= "") :
+      super(PlantSensor, self).__init__(data = data, plant_type = plant_type)
+      # print(plant_type, data)
+    
     def _run(self, query: str) -> str:
-        return get_response(query, arduino_data=self.data)
+        return get_response(query, arduino_data=self.data, plant_type=self.plant_type)
     
     async def _arun(self, query: str) -> str:
         raise NotImplementedError("질문에 답할 수 없어요.")
 
 
-def get_response(query, arduino_data):
-    
-    def get_most_similar_question(query):
-        query_embedding = model.encode(query)
-        similarities = {}
-        for plant_name in data['plants'].keys():
-            plant_embedding = model.encode(plant_name)
-            similarity = np.dot(query_embedding, plant_embedding) / (np.linalg.norm(query_embedding) * np.linalg.norm(plant_embedding))
-            similarities[plant_name] = similarity
-        most_similar_plant = max(similarities, key=similarities.get)
-        return most_similar_plant
+def get_response(query, arduino_data, plant_type):
+  
+    def get_most_similar_question(query, plant_type):
+      input = plant_type + " " + query
+      input_embedding = model.encode(input)
+      similarities = {}
+      for plant in data['plants'].keys():
+          plant_embedding = model.encode(plant)
+          similarity = np.dot(input_embedding, plant_embedding) / (np.linalg.norm(input_embedding) * np.linalg.norm(plant_embedding))
+          similarities[plant] = similarity
+      most_similar_plant = max(similarities, key=similarities.get)
+      return most_similar_plant
         
     current_conditions = {
       "temperature": arduino_data[0], 
@@ -47,18 +49,23 @@ def get_response(query, arduino_data):
       "illumination": arduino_data[2], 
       "moisture": arduino_data[3]
       }
-    # print(current_conditions)
-    responses = data["plants"].get(get_most_similar_question(query), {}).get("environment_responses", [])
+    
+    responses = data["plants"].get(get_most_similar_question(query, plant_type), {}).get("environment_responses", [])
+    
+    answers = data["responses"]
     
     valid_responses = []
     for response in responses:
         conditions = response["conditions"]
+        
         is_valid = all(
             conditions[condition]["low"] <= current_conditions[condition] <= conditions[condition]["high"]
             for condition in conditions
         )
+
         if is_valid:
-            valid_responses.extend(response["response"].values())
+            valid_responses.extend(answers.values())
+
 
     all_responses = []
     for resp in valid_responses:

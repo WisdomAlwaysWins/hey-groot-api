@@ -238,6 +238,8 @@ class ChatView(APIView):
         "message" : "현재 등록된 식물이 없어 대화를 진행할 수 없습니다. 식물 정보를 등록해주세요."
       }, status=status.HTTP_400_BAD_REQUEST)
       
+    plantName = partner.plant_id.cntntsSj
+      
     partnerName = partner.name
     
     datas = ScheduledPlantData.objects.filter(partner_id = partner).last()
@@ -251,20 +253,20 @@ class ChatView(APIView):
     
     ChatBotName_tool = Tool(
       name="chatbot_name",
-      func=ChatBotName(partner_name=partnerName).run,
-      description = """이름을 묻거나 인사를 할 때 사용하는 도구 예를 들자면 반가워, 안녕?, 너의 이름은 뭐야?, 너는 누구야?, 넌 누구니?"""
+      func=ChatBotName(partner_name=partnerName, plant_name=plantName).run,
+      description =  """Tools used for greeting or asking names, for example, 'Nice to meet you', 'Hello?', 'What is your name?', 'Who are you?', 'Who are you?, What kind of plant are you?"""
     )
     
     response_tool = Tool(
       name="response_generator",
       func=ResponseGenerator().run,
-      description="""일상적인 대화 시 사용하는 도구"""
+      description="""Tools used for everyday conversation with plants"""
     )
 
     sensor_tool = Tool(
         name='sensor_tool',
-        func= PlantSensor(data=data).run,
-        description="""조건에 맞는 응답을 가져올 때 사용하는 도구이다(사용자의 입력에 "온도","습도"가 포함되면 무조건 사용). 이때, 배열에 있는 응답 중 하나를 랜덤으로 추출하고 그대로 응답한다. (실제로 센서 값을 받아오는 게 아님 huminity = 습도, temperature = 온도)"""
+        func= PlantSensor(data=data, plant_type=plantName).run,
+        description="""The tool used for receiving a random response from among those generated when asked questions about temperature, humidity, moisture, and sunlight by a user."""
     )
 
     plant_info_tool = Tool(
@@ -285,7 +287,7 @@ class ChatView(APIView):
     conversational_agent = initialize_agent(
         agent=AgentType.OPENAI_FUNCTIONS,
         tools=tools,
-        llm=ChatOpenAI(temperature=0.1, model="gpt-3.5-turbo"),
+        llm=ChatOpenAI(temperature=0.1, model="gpt-4-1106-preview"),
         verbose=False,
         max_iterations=5,
         early_stopping_method='generate',
