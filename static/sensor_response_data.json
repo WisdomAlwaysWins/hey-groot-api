@@ -1,6 +1,6 @@
 {
   "plants": {
-    "산세베리아의 온도 및 습도, 수분, 햇빛량": {
+    "산세베리아의 온도 및 습도, 토양 수분, 햇빛량": {
       "environment_responses": [
         {
           "conditions": {
@@ -8,10 +8,6 @@
             "humidity": {"low": 20, "high": 80},
             "illumination": {"low": 0, "high": 200},
             "moisture": {"low": 0, "high": 30}
-          },
-          "response": {
-            "0": "실내에 머무르세요",
-            "1": "추우니까 여기 있어요!"
           }
         },
         {
@@ -43,10 +39,6 @@
             "humidity": {"low": 50, "high": 90},
             "illumination": {"low": 300, "high": 800},
             "moisture": {"low": 20, "high": 60}
-          },
-          "response": {
-            "0": "실내에 머무르세요",
-            "1": "추우니까 여기 있어요!"
           }
         }
       ]
@@ -59,8 +51,7 @@
             "humidity": {"low": 40, "high": 70},
             "illumination": {"low": 500, "high": 800},
             "moisture": {"low": 10, "high": 40}
-          },
-          "response": {}
+          }
         }
       ]
     },
@@ -72,8 +63,7 @@
             "humidity": {"low": 40, "high": 70},
             "illumination": {"low": 500, "high": 800},
             "moisture": {"low": 30, "high": 50}
-          },
-          "response": {}
+          }
         }
       ]
     },
@@ -85,16 +75,6 @@
             "humidity": {"low": 65, "high": 100},
             "illumination": {"low": 800, "high": 1000},
             "moisture": {"low": 50, "high": 100}
-          },
-          "response": {
-            "0": "현재 온도는 ${temperature}도로 실내에 머무르는게 좋을 것 같아요!",
-            "1": "현재 온도는 ${temperature}도로 조금 쌀쌀해요",
-            "2": "현재 온도는 ${temperature}도로 너무 쌀쌀한 것 같아요.",
-            "3": "현재 온도는 ${temperature}도로 밖이 너무 추워요.",
-            "4": "현재 저의 습도는 ${humidity}%로 굉장히 적합한 습도를 유지하고 있어요!",
-            "5": "현재 저의 습도는 ${humidity}%로 너무 상쾌해요.",
-            "6": "현재 저의 습도는 ${humidity}%로 너무 상쾌해요.",
-            "7": "저의 햇빛량은 ${illumination}lux로 굉장히 좋은 밝기를 유지하고 있어요."
           }
         }
       ]
@@ -107,8 +87,7 @@
             "humidity": {"low": 40, "high": 70},
             "illumination": {"low": 500, "high": 800},
             "moisture": {"low": 30, "high": 50}
-          },
-          "response": {}
+          }
         }
       ]
     },
@@ -120,8 +99,7 @@
             "humidity": {"low": 40, "high": 70},
             "illumination": {"low": 500, "high": 800},
             "moisture": {"low": 30, "high": 50}
-          },
-          "response": {}
+          }
         }
       ]
     },
@@ -133,8 +111,7 @@
             "humidity": {"low": 40, "high": 70},
             "illumination": {"low": 500, "high": 800},
             "moisture": {"low": 30, "high": 50}
-          },
-          "response": {}
+          }
         }
       ]
     },
@@ -146,8 +123,7 @@
             "humidity": {"low": 40, "high": 70},
             "illumination": {"low": 500, "high": 800},
             "moisture": {"low": 30, "high": 50}
-          },
-          "response": {}
+          }
         }
       ]
     },
@@ -159,20 +135,65 @@
             "humidity": {"low": 40, "high": 70},
             "illumination": {"low": 800, "high": 1600},
             "moisture": {"low": 30, "high": 50}
-          },
-          "response": {}
+          }
         }
       ]
     }
   },
   "responses" : {
-    "0": "제가 있는 곳은 ${temperature}도로 딱 좋아요!", 
-    "1": "${temperature}도는 저에게 조금 쌀쌀해요. 조금 더 따뜻한 곳으로 옮겨주세요!",
-    "2": "${temperature}도는 너무 쌀쌀해요. 햇빛이 드는 곳이 좋아요.",
-    "3": "현재 온도는 ${temperature}도로 너무 추워요. 제가 있는 곳을 따뜻하게 만들어줄 방법은 없나요?",
-    "4": "현재 습도는 ${humidity}%로 굉장히 적합한 습도를 유지하고 있어요!",
-    "5": "현재 습도는 ${humidity}%로 수분 흡수가 아주 잘되는 환경이에요.",
-    "6": "현재 습도는 ${humidity}%로 아주 좋아요.",
-    "7": "제가 있는 곳은 ${illumination}lux로 제가 자라기에 아주 좋은 환경이에요!."
+    "low" : {
+      "temperature" : {
+        "0": "${temperature}도는 저에게 쌀쌀해요. 조금 더 따뜻한 곳으로 옮겨주세요!",
+        "1": "현재 온도는 ${temperature}도로 너무 추워요. 제가 있는 곳을 따뜻하게 만들어줄 방법은 없나요?"
+      },
+      "humidity" : {
+        "2": "지금 습도는 ${humidity} 퍼센트로 공기가 건조한 것 같아요.",
+        "3": "지금 습도는 ${humidity} 퍼센트로 제가 있기엔 공기가 건조해요."
+      },
+      "illumination" : {
+        "4": "${illumination} Lux로 여기서 제가 자리기에는 빛이 모자라요",
+        "5": "${illumination} Lux는 저에게 어두워요. 좀 더 밝은 곳으로 옮겨주실 수 있나요?"
+      },
+      "moisture" : {
+        "6": "흙은 ${moisture} 퍼센트 정도로 저에겐 조금 건조한 것 같아요",
+        "7": "흙이 ${moisture} 퍼센트 정도의 촉촉함을 유지하고 있어요. 제가 자라기엔 흙이 촉촉하지 못해요. 물을 주실 수 있나요?"
+      }
+    },
+    "mid" : {
+      "temperature" : {
+        "0": "제가 있는 곳은 ${temperature}도로 z딱 좋아요!",
+        "1": "${temperature}도로 저를 기분 좋게 만들어주는 온도네요"
+      },
+      "humidity" : {
+        "2": "지금 습도는 ${humidity} 퍼센트로 굉장히 적합한 습도를 유지하고 있어요!",
+        "3": "현재 습도는 ${humidity} 퍼센트로 수분 흡수가 아주 잘되는 환경이에요."
+      },
+      "illumination" : {
+        "4": "제가 있는 곳은 ${illumination} Lux로 제가 자라기에 아주 좋은 환경이에요!",
+        "5": "${illumination} Lux로 적당한 밝기를 유지하고 있어요!"
+      },
+      "moisture" : {
+        "6": "${moisture} 퍼센트의 촉촉함을 유지하고 있어요. 제가 물을 마시기 아주 좋아요!",
+        "7": "${moisture} 퍼센트의 촉촉함은 제가 물을 잘 흡수할 수 있는 환경이에요."
+      }
+    },
+    "high" : {
+      "temperature" : {
+        "0": "제가 있는 곳은 ${temperature}도로 너무 더워요.",
+        "1": "${temperature}도로 제가 말라가고 있는 느낌이에요. 조금 더 온도가 낮은 곳으로 옮겨주세요."
+      },
+      "humidity" : {
+        "2": "지금 습도는 ${humidity} 퍼센트로 너무 습해요.",
+        "3": "현재 습도는 ${humidity} 퍼센트로 저의 잎이 너무 축축해요."
+      },
+      "illumination" : {
+        "4": "제가 있는 곳은 ${illumination} Lux로 너무 밝은 빛을 받고 있어요.",
+        "5": "${illumination} Lux로 조금만 어두운 곳으로 가고 싶어요."
+      },
+      "moisture" : {
+        "6": "${moisture} 퍼센트의 촉촉함을 가지고 있어요. 저는 이렇게 습한 흙에 있으면 뿌리가 썩을 수 있어요.",
+        "7": "${moisture} 퍼센트의 촉촉함은 저에게 너무 축축한 흙이에요. 바람과 햇빛이 있는 곳으로 저를 옮겨주시면 이 문제를 해결할 수 있을 것 같아요!"
+      }
+    }
   }
 }

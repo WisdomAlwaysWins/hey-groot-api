@@ -55,21 +55,51 @@ def get_response(query, arduino_data, plant_type):
     answers = data["responses"]
     
     valid_responses = []
+    
     for response in responses:
         conditions = response["conditions"]
         
-        is_valid = all(
+        for condition in conditions :
+          
+          if (conditions[condition]["low"] <= current_conditions[condition] <= conditions[condition]["high"]) :
+            if condition == "temperature" : valid_responses.extend(answers["mid"]["temperature"].values())
+            elif condition == "humidity" : valid_responses.extend(answers["mid"]["humidity"].values())
+            elif condition == "illumination" : valid_responses.extend(answers["mid"]["illumination"].values())
+            elif condition == "moisture" : valid_responses.extend(answers["mid"]["moisture"].values())
+              
+          elif (current_conditions[condition] < conditions[condition]["low"]) :
+            if condition == "temperature" : valid_responses.extend(answers["low"]["temperature"].values())
+            elif condition == "humidity" : valid_responses.extend(answers["low"]["humidity"].values())
+            elif condition == "illumination" : valid_responses.extend(answers["low"]["illumination"].values())
+            elif condition == "moisture" : valid_responses.extend(answers["low"]["moisture"].values())
+            
+          elif (conditions[condition]["high"] < current_conditions[condition]) :
+            if condition == "temperature" : valid_responses.extend(answers["high"]["temperature"].values())
+            elif condition == "humidity" : valid_responses.extend(answers["high"]["humidity"].values())
+            elif condition == "illumination" : valid_responses.extend(answers["high"]["illumination"].values())
+            elif condition == "moisture" : valid_responses.extend(answers["high"]["moisture"].values())
+        
+        '''        
+        mid_is_valid = all(
             conditions[condition]["low"] <= current_conditions[condition] <= conditions[condition]["high"]
             for condition in conditions
         )
-
-        if is_valid:
-            valid_responses.extend(answers.values())
-
+        
+        low_is_valid = all(
+          current_conditions[condition] < conditions[condition]["low"] 
+          for condition in conditions
+        )
+        
+        high_is_valid = all(
+          conditions[condition]["high"] < current_conditions[condition] 
+          for condition in conditions
+        )
+      '''
 
     all_responses = []
     for resp in valid_responses:
         for condition, value in current_conditions.items():
+            # print(condition, value)
             resp = resp.replace(f"${{{condition}}}", str(value))
         all_responses.append(resp)
     
