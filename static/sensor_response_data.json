@@ -31,26 +31,26 @@
         }
       ]
     },
-    "스투키": {
+    "가울테리아": {
       "environment_responses": [
         {
           "conditions": {
-            "temperature": {"low": 20, "high": 30},
-            "humidity": {"low": 50, "high": 90},
-            "illumination": {"low": 300, "high": 800},
-            "moisture": {"low": 20, "high": 60}
+            "temperature": {"low": 11, "high": 25},
+            "humidity": {"low": 35, "high": 75},
+            "illumination": {"low": 750, "high": 10000},
+            "moisture": {"low": 20, "high": 90}
           }
         }
       ]
     },
-    "스파티필름": {
+    "스파티필룸": {
       "environment_responses": [
         {
           "conditions": {
-            "temperature": {"low": 16, "high": 26},
-            "humidity": {"low": 40, "high": 70},
-            "illumination": {"low": 500, "high": 800},
-            "moisture": {"low": 10, "high": 40}
+            "temperature": {"low": 16, "high": 30},
+            "humidity": {"low": 35, "high": 75},
+            "illumination": {"low": 250, "high": 1200},
+            "moisture": {"low": 30, "high": 90}
           }
         }
       ]
@@ -59,10 +59,10 @@
       "environment_responses": [
         {
           "conditions": {
-            "temperature": {"low": 21, "high": 25},
-            "humidity": {"low": 40, "high": 70},
-            "illumination": {"low": 500, "high": 800},
-            "moisture": {"low": 30, "high": 50}
+            "temperature": {"low": 16, "high": 30},
+            "humidity": {"low": 35, "high": 75},
+            "illumination": {"low": 250, "high": 1550},
+            "moisture": {"low": 30, "high": 80}
           }
         }
       ]
@@ -71,22 +71,22 @@
       "environment_responses": [
         {
           "conditions": {
-            "temperature": {"low": 15, "high": 25},
-            "humidity": {"low": 65, "high": 100},
-            "illumination": {"low": 800, "high": 1000},
+            "temperature": {"low": 10, "high": 25},
+            "humidity": {"low": 60, "high": 101},
+            "illumination": {"low": 750, "high": 10000},
             "moisture": {"low": 50, "high": 100}
           }
         }
       ]
     },
-    "콩고": {
+    "호야": {
       "environment_responses": [
         {
           "conditions": {
-            "temperature": {"low": 20, "high": 26},
-            "humidity": {"low": 40, "high": 70},
-            "illumination": {"low": 500, "high": 800},
-            "moisture": {"low": 30, "high": 50}
+            "temperature": {"low": 16, "high": 30},
+            "humidity": {"low": 35, "high": 75},
+            "illumination": {"low": 750, "high": 10000},
+            "moisture": {"low": 20, "high": 70}
           }
         }
       ]
@@ -95,9 +95,9 @@
       "environment_responses": [
         {
           "conditions": {
-            "temperature": {"low": 15, "high": 30},
-            "humidity": {"low": 40, "high": 70},
-            "illumination": {"low": 500, "high": 800},
+            "temperature": {"low": 10, "high": 25},
+            "humidity": {"low": 35, "high": 75},
+            "illumination": {"low": 750, "high": 10000},
             "moisture": {"low": 30, "high": 50}
           }
         }
