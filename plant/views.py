@@ -167,7 +167,7 @@ class BookmarkView(APIView):
 class BookmarkListView(APIView):
     # 북마크 리스트
     def get(self, request):
-        bookmark = Bookmark.objects.filter(user_id = request.user.id)
+        bookmark = Bookmark.objects.filter(user_id = request.user.id).order_by('plantinfo__id')
         serializer = BookmarkSerializer(bookmark, many = True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
