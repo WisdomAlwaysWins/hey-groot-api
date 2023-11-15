@@ -193,10 +193,10 @@ class PartnerView(APIView):
           }, status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request):
-        request.data._mutable = True
+        request.POST._mutable = True
         request.data['user_id'] = request.user.id
-        request.data._mutable = False
-        partner = Partner.objects.filter(user_id = request.user)
+        request.POST._mutable = False
+        partner = Partner.objects.filter(user_id = request.user).last()
         
         if partner.exists() :
             return Response({
@@ -214,7 +214,7 @@ class PartnerView(APIView):
     
     def patch(self, request):
       
-        partner = Partner.objects.get(user_id = request.user, id = request.data['partner_id'])  
+        partner = Partner.objects.get(user_id = request.user).last()  
         
         serializer = PartnerUpdateSerializer(partner, request.data, partial=True)
         
@@ -224,11 +224,6 @@ class PartnerView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         else :
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        
-        return Response(
-          {'mesg' : 'hi'},
-          status = status.HTTP_200_OK
-        )
         
 class ChatView(APIView):
   

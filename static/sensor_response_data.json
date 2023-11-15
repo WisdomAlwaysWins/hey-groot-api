@@ -1,6 +1,6 @@
 {
   "plants": {
-    "산세베리아의 온도 및 습도, 토양 수분, 햇빛량": {
+    "산세베리아": {
       "environment_responses": [
         {
           "conditions": {
