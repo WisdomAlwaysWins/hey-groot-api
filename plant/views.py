@@ -198,7 +198,7 @@ class PartnerView(APIView):
         request.POST._mutable = False
         partner = Partner.objects.filter(user_id = request.user).last()
         
-        if partner.exists() :
+        if partner :
             return Response({
                 "message" : "이미 생성 완료"
             }, status = status.HTTP_400_BAD_REQUEST)
