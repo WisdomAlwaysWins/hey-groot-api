@@ -333,10 +333,11 @@ class PlantInfoViewSet(viewsets.ModelViewSet):
   
 class ScheduledPlantDataView(APIView):
   def get(self, request):
-    partner = Partner.objects.filter(user_id = request.user.id)
+    partner = Partner.objects.filter(user_id = request.user.id).last()
 
+    print(partner)
+    
     if partner :
-      partner = partner[0]
       # print(partner)
       datas = ScheduledPlantData.objects.filter(partner_id = partner)
       instance = {
