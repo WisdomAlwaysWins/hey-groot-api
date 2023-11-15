@@ -344,6 +344,7 @@ class ScheduledPlantDataView(APIView):
       return Response(serializer.data, status=status.HTTP_200_OK)
       
     else : 
+      print("없어요")
       return Response({
         "message" : "등록된 파트너 정보가 없습니다."
       }, status=status.HTTP_400_BAD_REQUEST)
