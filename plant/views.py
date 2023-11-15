@@ -198,11 +198,15 @@ class PartnerView(APIView):
         request.POST._mutable = False
         partner = Partner.objects.filter(user_id = request.user).last()
         
+        print(partner)
+        
         if partner :
-            return Response({
+          print("파트너 등록 : 이미 있음")
+          return Response({
                 "message" : "이미 생성 완료"
-            }, status = status.HTTP_400_BAD_REQUEST)
+          }, status = status.HTTP_400_BAD_REQUEST)
         else :
+            print("파트너 등록 : 하고 있음")
             character = Character.objects.get(id = request.data['character_id'])
             serializer = PartnerUpdateSerializer(data = request.data)
             
