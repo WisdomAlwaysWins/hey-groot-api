@@ -251,13 +251,13 @@ class ChatView(APIView):
     ChatBotName_tool = Tool(
       name="chatbot_name",
       func=ChatBotName(partner_name=partnerName, plant_name=plantName).run,
-      description =  """Tools used for greeting or asking names, for example, 'Nice to meet you', 'Hello?', 'What is your name?', 'Who are you?', 'Who are you?, What kind of plant are you?"""
+      description =  "It's a tool used for greeting or asking names, with phrases like 'Nice to meet you', 'Hello', 'What's your name?', 'Who are you?', and it only retrieves responses from ChatBotName_tool. Not used when asking where someone lives."
     )
     
     response_tool = Tool(
       name="response_generator",
       func=ResponseGenerator().run,
-      description="""Tools used for everyday conversation with plants"""
+      description="""It's a tool used for everyday conversation with plants. Examples include responses like 'Are you sleeping?', 'Where you live', 'Where were you born?', 'I'm hungry'. Responses are only retrieved from response_generator."""
     )
 
     sensor_tool = Tool(
