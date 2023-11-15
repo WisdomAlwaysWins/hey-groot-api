@@ -147,8 +147,14 @@ class BookmarkView(APIView):
     def post(self, request):
         
         p = PlantInfo.objects.get(id = request.data['plant_id'])
-        print(request.data['plant_id'], p.cntntsSj)
         
+        if p == None :
+          print(request.data['plant_id'], "인덱스 값에서 벗어남")
+          return Response({
+            "message" : "식물 정보 인덱스 값에서 벗어났습니다."
+          }, status = status.HTTP_400_BAD_REQUEST)
+          
+        print(request.data['plant_id'], p.cntntsSj)
         
         bookmark = Bookmark.objects.filter(user_id = request.user.id, plantinfo = p)
         
@@ -198,7 +204,7 @@ class PartnerView(APIView):
         request.POST._mutable = False
         partner = Partner.objects.filter(user_id = request.user).last()
         
-        print(partner)
+        print
         
         if partner :
           print("파트너 등록 : 이미 있음")
