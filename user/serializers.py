@@ -42,6 +42,8 @@ class CustomLoginSerializer(LoginSerializer):
         user = self.get_auth_user('', email, password)
         user1 = authenticate(attrs, email=email, password=password)
 
+        print(email)
+        
         if not user:
             msg = _('Unable to log in with provided credentials.')
             raise exceptions.ValidationError(msg)
