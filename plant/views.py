@@ -3,12 +3,15 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, viewsets
+from rest_framework.pagination import PageNumberPagination
+from rest_framework import filters
+
 from .models import *
 from .serializer import *
 from user.models import User
-from rest_framework.pagination import PageNumberPagination
-from rest_framework import filters
+
 from datetime import datetime
+
 from langchain.llms import OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.chains.conversation.memory import ConversationBufferWindowMemory
@@ -50,7 +53,6 @@ environ.Env.read_env(BASE_DIR / '.env')
 # SECRET_KEY = env('SECRET_KEY')
 # load_dotenv()
 
-# LangChain 클래스
 
 '''
 
@@ -244,7 +246,7 @@ class PartnerView(APIView):
 class ChatView(APIView):
   
   def post(self, request): # 대화
-    
+    print(request.headers.get('Authorization'))
     user = User.objects.get(id=request.user.id)
     
     partner = Partner.objects.filter(user_id = request.user.id).last()
@@ -352,11 +354,9 @@ class ScheduledPlantDataView(APIView):
     partner = Partner.objects.filter(user_id = request.user.id).last()
     user = User.objects.get(id=request.user.id)
     
-    print(partner)
-    
     if partner :
       if user is not None :
-        print("** ", user.email, "의 아두이노 정보 전달 ")
+        print("** ", user.email, "의 아두이노 정보 전달 :", partner.name)
       datas = ScheduledPlantData.objects.filter(partner_id = partner)
       instance = {
         'partner' : partner,

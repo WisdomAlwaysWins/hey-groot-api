@@ -59,7 +59,7 @@
       "environment_responses": [
         {
           "conditions": {
-            "temperature": {"low": 16, "high": 30},
+            "temperature": {"low": 16, "high": 35},
             "humidity": {"low": 35, "high": 75},
             "illumination": {"low": 250, "high": 1550},
             "moisture": {"low": 30, "high": 80}

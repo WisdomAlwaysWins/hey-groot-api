@@ -18,12 +18,14 @@ class UserSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self, validated_data):
+        email = validated_data.get('email')
         password = validated_data.get("password")
-        instance = self.Meta.model(**validated_data)
-        if password is not None:
-            instance.set_password(password)
-        instance.save()
-        return instance
+        user = User(
+          email = email,
+        )
+        user.set_password(password)
+        user.save()
+        return user
     
 class CustomUserDetailsSerializer(UserDetailsSerializer):
     """
