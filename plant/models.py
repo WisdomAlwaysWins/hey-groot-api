@@ -39,7 +39,7 @@ class PlantInfo(models.Model):
   toxcty = models.IntegerField(null=True, blank=True)	
   watercycleSprng = models.IntegerField(null=True, blank=True)	
   watercycleSummer = models.IntegerField(null=True, blank=True)	
-  watercycleAutum = models.IntegerField(null=True, blank=True)	
+  watercycleAutumn = models.IntegerField(null=True, blank=True)	
   watercycleWinter = models.IntegerField(null=True, blank=True)	
   minWinterTp = models.IntegerField(null=True, blank=True)	
   maxWinterTp = models.IntegerField(null=True, blank=True)	
