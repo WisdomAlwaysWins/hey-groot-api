@@ -188,12 +188,16 @@ class PartnerView(APIView):
     def get(self, request):
 
         partner = Partner.objects.filter(user_id = request.user.id)
+        user = User.objects.get(id=request.user.id)
         
         if partner:
+          if user is not None :
+            print("** ", user.email ,"파트너 정보 전달")
           serializer = PartnerDetailSerializer(partner, many=True)
           return Response(serializer.data, status=status.HTTP_200_OK)
         else :
-          # print("*************   없어요 없다구요   ", partner)
+          if user is not None :
+            print("** ", user.email ,"파트너 정보 전달 실패(미설정)")
           return Response({
               "message" : "등록된 대화 상대 정보가 없습니다."
           }, status=status.HTTP_400_BAD_REQUEST)
@@ -203,16 +207,18 @@ class PartnerView(APIView):
         request.data['user_id'] = request.user.id
         request.POST._mutable = False
         partner = Partner.objects.filter(user_id = request.user).last()
-        
-        print
+  
+        user = User.objects.get(id=request.user.id)
         
         if partner :
-          print("파트너 등록 : 이미 있음")
+          if user is not None :
+            print("** ", user.email ,"파트너 등록 : 이미 있음")
           return Response({
                 "message" : "이미 생성 완료"
           }, status = status.HTTP_400_BAD_REQUEST)
         else :
-            print("파트너 등록 : 하고 있음")
+          if user is not None :
+            print("** ", user.email ,"파트너 등록 : 하고 있음")
             character = Character.objects.get(id = request.data['character_id'])
             serializer = PartnerUpdateSerializer(data = request.data)
             
@@ -226,7 +232,6 @@ class PartnerView(APIView):
     def patch(self, request):
       
         partner = Partner.objects.get(user_id = request.user).last()  
-        
         serializer = PartnerUpdateSerializer(partner, request.data, partial=True)
         
         serializer.is_valid()
@@ -239,9 +244,14 @@ class PartnerView(APIView):
 class ChatView(APIView):
   
   def post(self, request): # 대화
+    
+    user = User.objects.get(id=request.user.id)
+    
     partner = Partner.objects.filter(user_id = request.user.id).last()
     
     if partner == None :
+      if user is not None :
+        print("** ", user.email, "대화 불가 (식물 미설정)")
       return Response({
         "message" : "현재 등록된 식물이 없어 대화를 진행할 수 없습니다. 식물 정보를 등록해주세요."
       }, status=status.HTTP_400_BAD_REQUEST)
@@ -340,11 +350,13 @@ class PlantInfoViewSet(viewsets.ModelViewSet):
 class ScheduledPlantDataView(APIView):
   def get(self, request):
     partner = Partner.objects.filter(user_id = request.user.id).last()
-
+    user = User.objects.get(id=request.user.id)
+    
     print(partner)
     
     if partner :
-      # print(partner)
+      if user is not None :
+        print("** ", user.email, "의 아두이노 정보 전달 ")
       datas = ScheduledPlantData.objects.filter(partner_id = partner)
       instance = {
         'partner' : partner,
@@ -354,7 +366,8 @@ class ScheduledPlantDataView(APIView):
       return Response(serializer.data, status=status.HTTP_200_OK)
       
     else : 
-      print("없어요")
+      if user is not None :
+        print("** ", user.email, "의 아두이노 정보 전달 실패(식물 미등록)")
       return Response({
         "message" : "등록된 파트너 정보가 없습니다."
       }, status=status.HTTP_400_BAD_REQUEST)

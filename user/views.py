@@ -16,13 +16,13 @@ class DeleteUserView(APIView):
 class UpdateUserInfoView(APIView):
     def get(self, request):
         user = User.objects.get(id = request.user.id)
-        print("***************    ", user)
+        print("** ", user)
         
         now = datetime.datetime.now()
         now_date = now.strftime('%Y-%m-%d %H:%M:%S')
         # print("********************  ", now_date)
         request.data['last_visit'] = now_date
-        print("***************    ", request.data['last_visit'])
+        print("** ", request.data['last_visit'])
 
         serializer = UserProfileSerializer(user, data = request.data, partial = True)
 

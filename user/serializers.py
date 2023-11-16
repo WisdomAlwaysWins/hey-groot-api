@@ -42,7 +42,7 @@ class CustomLoginSerializer(LoginSerializer):
         user = self.get_auth_user('', email, password)
         user1 = authenticate(attrs, email=email, password=password)
 
-        print("로그인한 사용자 이메일 :", email)
+        print("** 로그인한 사용자 이메일 :", email)
         
         if not user:
             msg = _('Unable to log in with provided credentials.')
